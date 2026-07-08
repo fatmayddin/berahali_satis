@@ -1,0 +1,63 @@
+/vendor/
+/node_modules/
+/public/build
+/public/hot
+/public/storage
+/storage/*.key
+/storage/logs/*.log
+/storage/framework/cache/data/*
+/storage/framework/sessions/*
+/storage/framework/testing/*
+/storage/framework/views/*
+/bootstrap/cache/*.php
+/.phpunit.cache
+.env
+.env.backup
+.env.production
+.phpunit.result.cache
+Homestead.json
+Homestead.yaml
+auth.json
+npm-debug.log
+yarn-error.log
+/.fleet
+/.idea
+/.vscode
+.DS_Store
+Thumbs.db
+
+# Laravel specific
+/storage/app/public/*
+!/storage/app/public/.gitkeep
+/storage/logs/*
+!/storage/logs/.gitkeep
+
+# Composer
+composer.phar
+
+# IDE files
+*.sublime-project
+*.sublime-workspace
+.project
+.buildpath
+.settings/
+
+# OS generated files
+.DS_Store?
+ehthumbs.db
+Icon?
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Laravel Mix
+/public/mix-manifest.json
+
+# Filament
+/storage/app/livewire-tmp/
+
+# Local development files
+.phpunit.result.cache
+.php_cs.cache
+.php-cs-fixer.cache
