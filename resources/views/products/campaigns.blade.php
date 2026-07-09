@@ -11,10 +11,9 @@
         <div class="pointer-events-none absolute top-[10%] -right-[4%] w-[240px] h-[240px] rounded-full opacity-25 blur-3xl"
              style="background: linear-gradient(135deg, #a585ff 0%, #ffc2ad 100%);"></div>
         <div class="max-w-6xl mx-auto px-5 relative">
-            <span class="badge badge-yellow mb-4">kaçırılmayacak fiyatlar</span>
             <h1 class="text-heading-3 md:text-heading-2 font-medium">Fırsat Ürünleri</h1>
             <p class="text-secondary/60 text-tagline-1 max-w-2xl mx-auto mt-4">
-                Özel kampanyalı ve son adetleri kalan ürünler. Bu fiyatlar stoklarla sınırlı — beğendiğinizi kaçırmayın.
+                Sezon sonu fırsatları ve tezgâhtaki son parçalar — hepsi mağaza güvencesiyle, hepsi indirimli.
             </p>
         </div>
     </section>

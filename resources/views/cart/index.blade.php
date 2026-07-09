@@ -5,7 +5,6 @@
 @section('content')
     <div class="max-w-6xl mx-auto px-5 pt-36">
         <div class="text-center mb-10">
-            <span class="badge badge-yellow mb-4">alışveriş</span>
             <h1 class="text-heading-3 font-medium">Sepetim</h1>
         </div>
 

@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', \App\Models\Setting::get('site_title', 'Bera Halı'))</title>
     <meta name="description" content="@yield('meta_description', 'Bera Halı - Kaliteli halılar, uygun fiyatlar, kapınıza kadar teslimat.')">
+    <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}">
+    <link rel="apple-touch-icon" href="{{ asset('images/favicon.png') }}">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -89,13 +91,30 @@
         .input:focus { border-color: #864ffe; box-shadow: 0 0 0 3px rgba(134,79,254,.15); }
     </style>
 </head>
-<body class="bg-bg3 text-secondary font-sans antialiased flex flex-col min-h-screen">
+<body class="text-secondary font-sans antialiased flex flex-col min-h-screen"
+      style="background: linear-gradient(180deg, #f5f3fb 0%, #f4f5f8 480px);">
+
+    {{-- Global dekoratif arka plan katmanı --}}
+    <div class="fixed inset-0 -z-10 pointer-events-none overflow-hidden select-none" aria-hidden="true">
+        {{-- Grenli gradient blob'lar (template görselleri) --}}
+        <img src="{{ asset('images/glow-cyan.png') }}" alt="" class="absolute -top-32 -left-40 w-[480px] opacity-50">
+        <img src="{{ asset('images/glow-warm.png') }}" alt="" class="absolute -top-24 -right-32 w-[520px] opacity-50">
+        <img src="{{ asset('images/glow-soft.png') }}" alt="" class="absolute top-[38%] -left-56 w-[560px] opacity-25">
+        <img src="{{ asset('images/glow-orb.png') }}" alt="" class="absolute top-[55%] -right-64 w-[620px] opacity-20">
+        {{-- Nokta deseni (üstte yoğun, aşağı doğru kaybolur) --}}
+        <div class="absolute inset-x-0 top-0 h-[560px]"
+             style="background-image: radial-gradient(rgba(26,26,28,0.07) 1px, transparent 1px);
+                    background-size: 26px 26px;
+                    -webkit-mask-image: radial-gradient(ellipse 80% 100% at 50% 0%, black 30%, transparent 75%);
+                    mask-image: radial-gradient(ellipse 80% 100% at 50% 0%, black 30%, transparent 75%);"></div>
+    </div>
 
     {{-- Floating pill navbar --}}
     <header class="fixed top-4 left-0 right-0 z-50 px-4" x-data="{ open: false }">
         <div class="max-w-6xl mx-auto bg-white/90 backdrop-blur-md border border-stroke2 rounded-full shadow-1 px-5 py-2.5 flex items-center justify-between gap-4">
-            <a href="{{ route('home') }}" class="text-xl font-semibold tracking-tight pl-2">
-                {{ \App\Models\Setting::get('site_title', 'Bera Halı') }}<span class="text-primary-500">.</span>
+            <a href="{{ route('home') }}" class="pl-1 flex items-center">
+                <img src="{{ asset('images/logo.png') }}" alt="{{ \App\Models\Setting::get('site_title', 'Bera Halı') }}"
+                     class="h-9 md:h-10 w-auto">
             </a>
 
             <nav class="hidden lg:flex items-center">
@@ -187,8 +206,9 @@
         <div class="max-w-6xl mx-auto px-5 relative">
             <div class="grid grid-cols-12 gap-x-0 gap-y-12 pt-16 pb-12">
                 <div class="col-span-12 md:col-span-5">
-                    <p class="text-xl font-semibold text-white">
-                        {{ \App\Models\Setting::get('site_title', 'Bera Halı') }}<span class="text-primary-400">.</span>
+                    <p class="flex items-center gap-3">
+                        <img src="{{ asset('images/favicon.png') }}" alt="" class="h-9 w-auto">
+                        <span class="text-xl font-semibold text-white">{{ \App\Models\Setting::get('site_title', 'Bera Halı') }}<span class="text-primary-400">.</span></span>
                     </p>
                     <p class="text-accent/60 mt-4 mb-7 max-w-[306px] leading-relaxed">
                         {{ \App\Models\Setting::get('home_subline') }}

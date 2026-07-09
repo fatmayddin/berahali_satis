@@ -28,6 +28,9 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->login()
             ->brandName('Bera Halı Yönetim')
+            ->brandLogo(asset('images/logo.png'))
+            ->brandLogoHeight('2.4rem')
+            ->favicon(asset('images/favicon.png'))
             ->colors([
                 'primary' => Color::Red,
             ])

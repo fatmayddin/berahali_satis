@@ -15,6 +15,7 @@ class HomeController extends Controller
             'featured' => Product::active()->where('is_featured', true)->latest()->take(8)->get(),
             'latest' => Product::active()->latest()->take(8)->get(),
             'categories' => Category::active()->get(),
+            'cutProduct' => Product::active()->where('is_cut', true)->latest()->first(),
         ]);
     }
 }

@@ -8,7 +8,6 @@
         <div class="pointer-events-none absolute top-0 -right-[4%] w-[280px] h-[280px] rounded-full opacity-25 blur-3xl"
              style="background: linear-gradient(135deg, #a585ff 0%, #ffc2ad 100%);"></div>
         <div class="max-w-6xl mx-auto px-5 relative">
-            <span class="badge badge-yellow mb-4">koleksiyon</span>
             <h1 class="text-heading-3 md:text-heading-2 font-medium">Ürünlerimiz</h1>
             <p class="text-secondary/50 mt-3">{{ $products->total() }} ürün listeleniyor</p>
         </div>

@@ -7,7 +7,7 @@
         <div class="pointer-events-none absolute top-0 -right-[4%] w-[260px] h-[260px] rounded-full opacity-25 blur-3xl"
              style="background: linear-gradient(135deg, #a585ff 0%, #ffc2ad 100%);"></div>
         <div class="max-w-6xl mx-auto px-5 relative">
-            <span class="badge badge-yellow mb-4">bize ulaşın</span>
+            <span class="badge badge-yellow mb-4">Bize Ulaşın</span>
             <h1 class="text-heading-3 md:text-heading-2 font-medium">İletişim</h1>
         </div>
     </section>
