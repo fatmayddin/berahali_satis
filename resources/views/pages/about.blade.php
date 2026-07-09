@@ -7,7 +7,7 @@
         <div class="pointer-events-none absolute top-0 -left-[4%] w-[260px] h-[260px] rounded-full opacity-25 blur-3xl"
              style="background: linear-gradient(135deg, #83e7ee 0%, #f9eb57 100%);"></div>
         <div class="max-w-6xl mx-auto px-5 relative">
-            <span class="badge badge-cyan mb-4">biz kimiz</span>
+            <span class="badge badge-cyan mb-4">biz </span>
             <h1 class="text-heading-3 md:text-heading-2 font-medium">Hakkımızda</h1>
         </div>
     </section>
