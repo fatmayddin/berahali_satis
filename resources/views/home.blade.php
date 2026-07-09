@@ -134,7 +134,6 @@
                  class="pointer-events-none select-none absolute -bottom-40 -left-44 w-[440px] opacity-30">
             <div class="max-w-6xl mx-auto px-5 relative">
                 <div class="text-center mb-10">
-                    <span class="badge badge-green mb-4">öne çıkanlar</span>
                     <h2 class="text-heading-4 md:text-heading-3 font-medium">Öne Çıkan Ürünler</h2>
                 </div>
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
@@ -157,7 +156,6 @@
 
             {{-- İçerik --}}
             <div class="p-8 md:p-12 relative">
-                <span class="badge badge-cyan mb-5">kesme halı</span>
                 <h2 class="text-heading-4 md:text-heading-3 font-medium mb-4">İstediğiniz boyda,<br>milimi milimine</h2>
                 <p class="text-secondary/60 mb-7 leading-relaxed">
                     Koridorunuz kaç metre olursa olsun; eni sabit yolluklarımızın boyunu siz seçin,
@@ -209,7 +207,7 @@
     @if($latest->isNotEmpty())
         <section class="max-w-6xl mx-auto px-5 py-12">
             <div class="text-center mb-10">
-                <span class="badge badge-cyan mb-4">yeni sezon</span>
+                <span class="badge badge-cyan mb-4">Yeni Sezon</span>
                 <h2 class="text-heading-4 md:text-heading-3 font-medium">Yeni Gelenler</h2>
             </div>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">

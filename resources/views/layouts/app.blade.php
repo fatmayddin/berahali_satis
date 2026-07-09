@@ -206,10 +206,8 @@
         <div class="max-w-6xl mx-auto px-5 relative">
             <div class="grid grid-cols-12 gap-x-0 gap-y-12 pt-16 pb-12">
                 <div class="col-span-12 md:col-span-5">
-                    <p class="flex items-center gap-3">
-                        <img src="{{ asset('images/favicon.png') }}" alt="" class="h-9 w-auto">
-                        <span class="text-xl font-semibold text-white">{{ \App\Models\Setting::get('site_title', 'Bera Halı') }}<span class="text-primary-400">.</span></span>
-                    </p>
+                    <img src="{{ asset('images/logo-beyaz.png') }}" alt="{{ \App\Models\Setting::get('site_title', 'Bera Halı') }}"
+                         class="h-11 w-auto">
                     <p class="text-accent/60 mt-4 mb-7 max-w-[306px] leading-relaxed">
                         {{ \App\Models\Setting::get('home_subline') }}
                     </p>
@@ -238,8 +236,9 @@
                     </ul>
                 </div>
             </div>
-            <div class="border-t border-white/10 text-center text-accent/40 text-sm py-5">
-                © {{ date('Y') }} {{ \App\Models\Setting::get('site_title', 'Bera Halı') }} — Tüm hakları saklıdır.
+            <div class="border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-2 text-accent/40 text-sm py-5">
+                <span>© {{ date('Y') }} {{ \App\Models\Setting::get('site_title', 'Bera Halı') }} — Tüm hakları saklıdır.</span>
+                <span><a href="https://www.instagram.com/equinoxiaweb?igsh=MW54ZGtraWlwMmZyYQ==" class="text-accent/60 hover:text-white transition font-medium">Equinoxia Web</a> tarafından geliştirilmiştir</span>
             </div>
         </div>
     </footer>
