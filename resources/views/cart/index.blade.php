@@ -88,6 +88,7 @@
                             <span class="font-medium">Toplam</span>
                             <span class="font-semibold text-primary-600">{{ number_format($total, 2, ',', '.') }} ₺</span>
                         </div>
+                        <p class="text-tagline-2 text-secondary/40">Aynı gün teslimat seçeneğini ödeme adımında seçebilirsiniz.</p>
                     </div>
                     <a href="{{ route('checkout.index') }}" class="btn btn-primary btn-lg w-full mt-6"><span>Ödemeye Geç</span></a>
                     <a href="{{ route('products.index') }}" class="block mt-2.5 text-center text-tagline-2 text-secondary/50 hover:text-secondary py-2 transition">

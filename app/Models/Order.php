@@ -8,9 +8,9 @@ class Order extends Model
 {
     protected $fillable = [
         'order_number', 'user_id', 'name', 'email', 'phone', 'address',
-        'city', 'district', 'note', 'subtotal', 'shipping_cost', 'total',
-        'status', 'payment_id', 'conversation_id', 'iyzico_token',
-        'payment_error', 'paid_at',
+        'city', 'district', 'note', 'shipping_method', 'subtotal',
+        'shipping_cost', 'total', 'status', 'payment_id', 'conversation_id',
+        'iyzico_token', 'payment_error', 'paid_at',
     ];
 
     protected $casts = [
@@ -18,6 +18,11 @@ class Order extends Model
         'shipping_cost' => 'decimal:2',
         'total' => 'decimal:2',
         'paid_at' => 'datetime',
+    ];
+
+    public const SHIPPING_METHODS = [
+        'cargo' => 'Kargo ile Gönderim',
+        'same_day' => 'Aynı Gün Teslimat (Mağaza Aracı)',
     ];
 
     public const STATUSES = [
@@ -43,6 +48,11 @@ class Order extends Model
     public function getStatusLabelAttribute(): string
     {
         return self::STATUSES[$this->status] ?? $this->status;
+    }
+
+    public function getShippingMethodLabelAttribute(): string
+    {
+        return self::SHIPPING_METHODS[$this->shipping_method] ?? $this->shipping_method;
     }
 
     public static function generateOrderNumber(): string

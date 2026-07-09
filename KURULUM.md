@@ -40,10 +40,21 @@ php artisan serve
 
 - Anasayfa (slider, özellik kutuları, öne çıkan + yeni ürünler)
 - Ürünler sayfası: kategori / m² aralığı / fiyat aralığı / indirimli filtreleri; fiyat ve m²'ye göre sıralama
+- Fırsatlar sayfası (/firsatlar): adminde "Fırsat Ürünü" işaretlenen kampanyalı ürünler; son 1-2 adet kalan ürünlerde otomatik "Son X adet" rozeti
+- Kesme halı: sabit en (örn. 80 cm), müşteri boyu seçer (slider/input), overlok isteğe bağlı (+ücret), fiyat anlık hesaplanır
 - Ürün detay (galeri, özellikler, m² bilgileri)
-- Sepet → misafir veya üye olarak ödeme → iyzico ödeme formu
+- Sepet → misafir veya üye olarak ödeme → teslimat yöntemi seçimi (Kargo / Aynı Gün Teslimat) → iyzico ödeme formu
 - Üyelik: kayıt/giriş, sipariş geçmişi
 - Hakkımızda, İletişim (form admin'e düşer)
+
+## Teslimat Seçenekleri
+
+Ödeme adımında iki seçenek sunulur, ücretleri Site Ayarları'ndan değişir:
+
+1. **Kargo ile Gönderim** — "Kargo Ücreti", "Ücretsiz Kargo Limiti" uygulanır
+2. **Aynı Gün Teslimat** — mağaza aracıyla elden teslim, sabit ücret (varsayılan 200 ₺), ücretsiz kargo limiti uygulanmaz
+
+Kategoriler Ferhatlar Halı formatında hazır: Dekoratif, Klasik, Sisal, İpek, Spor Klasik, Dijital Baskı, Bambu, Çocuk, Kilim, Post, Kesme, Yün grupları.
 
 ## İyzico
 

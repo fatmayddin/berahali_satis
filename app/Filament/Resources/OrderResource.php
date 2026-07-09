@@ -77,6 +77,10 @@ class OrderResource extends Resource
                     Infolists\Components\TextEntry::make('city')->label('İl'),
                     Infolists\Components\TextEntry::make('district')->label('İlçe')->placeholder('-'),
                     Infolists\Components\TextEntry::make('address')->label('Adres')->columnSpanFull(),
+                    Infolists\Components\TextEntry::make('shipping_method_label')
+                        ->label('Teslimat Yöntemi')
+                        ->badge()
+                        ->color(fn ($record) => $record->shipping_method === 'same_day' ? 'warning' : 'gray'),
                     Infolists\Components\TextEntry::make('note')->label('Not')->placeholder('-')->columnSpanFull(),
                 ]),
 

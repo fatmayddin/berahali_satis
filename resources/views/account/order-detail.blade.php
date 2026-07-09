@@ -53,6 +53,7 @@
                 <p><span class="text-secondary/50 text-tagline-2 block">Ad Soyad</span>{{ $order->name }}</p>
                 <p><span class="text-secondary/50 text-tagline-2 block">Telefon</span>{{ $order->phone }}</p>
                 <p><span class="text-secondary/50 text-tagline-2 block">Adres</span>{{ $order->address }} {{ $order->district }} / {{ $order->city }}</p>
+                <p><span class="text-secondary/50 text-tagline-2 block">Teslimat Yöntemi</span>{{ $order->shipping_method_label }}</p>
                 @if($order->note)
                     <p><span class="text-secondary/50 text-tagline-2 block">Not</span>{{ $order->note }}</p>
                 @endif

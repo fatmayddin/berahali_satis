@@ -136,12 +136,24 @@ class CartService
         return round(array_sum(array_column($this->items(), 'line_total')), 2);
     }
 
+    /** Standart kargo ücreti (ücretsiz kargo limiti uygulanır) */
     public function shippingCost(): float
+    {
+        return $this->shippingCostFor('cargo');
+    }
+
+    /** Seçilen teslimat yöntemine göre ücret */
+    public function shippingCostFor(string $method): float
     {
         $subtotal = $this->subtotal();
 
         if ($subtotal <= 0) {
             return 0;
+        }
+
+        // Aynı gün teslimat: sabit ücret, ücretsiz kargo limiti uygulanmaz
+        if ($method === 'same_day') {
+            return (float) Setting::get('same_day_price', 200);
         }
 
         $freeLimit = (float) Setting::get('free_shipping_limit', 0);
@@ -153,8 +165,8 @@ class CartService
         return (float) Setting::get('shipping_cost', 0);
     }
 
-    public function total(): float
+    public function total(string $method = 'cargo'): float
     {
-        return round($this->subtotal() + $this->shippingCost(), 2);
+        return round($this->subtotal() + $this->shippingCostFor($method), 2);
     }
 }

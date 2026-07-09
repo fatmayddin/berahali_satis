@@ -19,32 +19,69 @@
             </div>
         @endif
 
-        <form method="POST" action="{{ route('checkout.pay') }}" class="grid lg:grid-cols-3 gap-8">
+        <form method="POST" action="{{ route('checkout.pay') }}" class="grid lg:grid-cols-3 gap-8"
+              x-data="{
+                  method: '{{ old('shipping_method', 'cargo') }}',
+                  subtotal: {{ $subtotal }},
+                  cargo: {{ $shippingCargo }},
+                  sameDay: {{ $shippingSameDay }},
+                  shipping() { return this.method === 'same_day' ? this.sameDay : this.cargo; },
+                  total() { return this.subtotal + this.shipping(); },
+                  fmt(v) { return v.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' ₺'; }
+              }">
             @csrf
 
-            {{-- Teslimat bilgileri --}}
-            <div class="lg:col-span-2 bg-white rounded-[24px] border border-stroke2 shadow-1 p-7 space-y-4">
-                <h2 class="text-heading-6 font-medium">Teslimat Bilgileri</h2>
+            <div class="lg:col-span-2 space-y-6">
+                {{-- Teslimat bilgileri --}}
+                <div class="bg-white rounded-[24px] border border-stroke2 shadow-1 p-7 space-y-4">
+                    <h2 class="text-heading-6 font-medium">Teslimat Bilgileri</h2>
 
-                @guest
-                    <p class="text-tagline-2 bg-bg3 rounded-xl px-4 py-3">
-                        Zaten üye misiniz?
-                        <a href="{{ route('login') }}" class="text-primary-600 font-medium hover:underline">Giriş yapın</a>
-                        veya üye olmadan devam edin.
-                    </p>
-                @endguest
+                    @guest
+                        <p class="text-tagline-2 bg-bg3 rounded-xl px-4 py-3">
+                            Zaten üye misiniz?
+                            <a href="{{ route('login') }}" class="text-primary-600 font-medium hover:underline">Giriş yapın</a>
+                            veya üye olmadan devam edin.
+                        </p>
+                    @endguest
 
-                <div class="grid sm:grid-cols-2 gap-4">
-                    <input type="text" name="name" value="{{ old('name', auth()->user()->name ?? '') }}" placeholder="Ad Soyad *" required class="input">
-                    <input type="email" name="email" value="{{ old('email', auth()->user()->email ?? '') }}" placeholder="E-posta *" required class="input">
+                    <div class="grid sm:grid-cols-2 gap-4">
+                        <input type="text" name="name" value="{{ old('name', auth()->user()->name ?? '') }}" placeholder="Ad Soyad *" required class="input">
+                        <input type="email" name="email" value="{{ old('email', auth()->user()->email ?? '') }}" placeholder="E-posta *" required class="input">
+                    </div>
+                    <div class="grid sm:grid-cols-3 gap-4">
+                        <input type="text" name="phone" value="{{ old('phone', auth()->user()->phone ?? '') }}" placeholder="Telefon *" required class="input">
+                        <input type="text" name="city" value="{{ old('city') }}" placeholder="İl *" required class="input">
+                        <input type="text" name="district" value="{{ old('district') }}" placeholder="İlçe" class="input">
+                    </div>
+                    <textarea name="address" rows="3" placeholder="Açık Adres *" required class="input !rounded-2xl">{{ old('address') }}</textarea>
+                    <textarea name="note" rows="2" placeholder="Sipariş notu (isteğe bağlı)" class="input !rounded-2xl">{{ old('note') }}</textarea>
                 </div>
-                <div class="grid sm:grid-cols-3 gap-4">
-                    <input type="text" name="phone" value="{{ old('phone', auth()->user()->phone ?? '') }}" placeholder="Telefon *" required class="input">
-                    <input type="text" name="city" value="{{ old('city') }}" placeholder="İl *" required class="input">
-                    <input type="text" name="district" value="{{ old('district') }}" placeholder="İlçe" class="input">
+
+                {{-- Teslimat yöntemi --}}
+                <div class="bg-white rounded-[24px] border border-stroke2 shadow-1 p-7">
+                    <h2 class="text-heading-6 font-medium mb-4">Teslimat Yöntemi</h2>
+                    <div class="grid sm:grid-cols-2 gap-4">
+                        <label class="flex gap-3 rounded-2xl border p-4 cursor-pointer transition-all"
+                               :class="method === 'cargo' ? 'border-primary-500 ring-2 ring-primary-100 bg-primary-50/40' : 'border-stroke2 hover:border-stroke3'">
+                            <input type="radio" name="shipping_method" value="cargo" x-model="method" class="accent-primary-500 mt-1">
+                            <span>
+                                <span class="font-medium block">Kargo ile Gönderim</span>
+                                <span class="text-tagline-2 text-secondary/50 block mt-0.5">Anlaşmalı kargo firması ile adresinize teslim.</span>
+                                <span class="text-tagline-2 font-semibold block mt-1.5" x-text="cargo > 0 ? fmt(cargo) : 'Ücretsiz'"></span>
+                            </span>
+                        </label>
+
+                        <label class="flex gap-3 rounded-2xl border p-4 cursor-pointer transition-all"
+                               :class="method === 'same_day' ? 'border-primary-500 ring-2 ring-primary-100 bg-primary-50/40' : 'border-stroke2 hover:border-stroke3'">
+                            <input type="radio" name="shipping_method" value="same_day" x-model="method" class="accent-primary-500 mt-1">
+                            <span>
+                                <span class="font-medium block">Aynı Gün Teslimat</span>
+                                <span class="text-tagline-2 text-secondary/50 block mt-0.5">Mağazamız tarafından aynı gün elden teslim (yakın bölgeler için).</span>
+                                <span class="text-tagline-2 font-semibold block mt-1.5" x-text="fmt(sameDay)"></span>
+                            </span>
+                        </label>
+                    </div>
                 </div>
-                <textarea name="address" rows="3" placeholder="Açık Adres *" required class="input !rounded-2xl">{{ old('address') }}</textarea>
-                <textarea name="note" rows="2" placeholder="Sipariş notu (isteğe bağlı)" class="input !rounded-2xl">{{ old('note') }}</textarea>
             </div>
 
             {{-- Özet --}}
@@ -64,12 +101,12 @@
                         <span class="font-medium">{{ number_format($subtotal, 2, ',', '.') }} ₺</span>
                     </div>
                     <div class="flex justify-between">
-                        <span class="text-secondary/50">Kargo</span>
-                        <span class="font-medium">{{ $shipping > 0 ? number_format($shipping, 2, ',', '.').' ₺' : 'Ücretsiz' }}</span>
+                        <span class="text-secondary/50" x-text="method === 'same_day' ? 'Aynı Gün Teslimat' : 'Kargo'"></span>
+                        <span class="font-medium" x-text="shipping() > 0 ? fmt(shipping()) : 'Ücretsiz'"></span>
                     </div>
                     <div class="border-t border-stroke4 pt-3 flex justify-between text-base">
                         <span class="font-medium">Toplam</span>
-                        <span class="font-semibold text-primary-600">{{ number_format($total, 2, ',', '.') }} ₺</span>
+                        <span class="font-semibold text-primary-600" x-text="fmt(total())"></span>
                     </div>
                 </div>
                 <button type="submit" class="btn btn-primary btn-lg w-full mt-6"><span>Güvenli Ödemeye Geç</span></button>

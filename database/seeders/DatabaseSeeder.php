@@ -34,6 +34,7 @@ class DatabaseSeeder extends Seeder
             'whatsapp' => '',
             'shipping_cost' => '250',
             'free_shipping_limit' => '5000',
+            'same_day_price' => '200',
             'overlock_price' => '150',
             'about_content' => "Bera Halı'nın hikâyesi, 1995 yılında kurucumuzun halıcılık mesleğine ilk adımını atmasıyla başladı. Halının dokusunu, desenini ve kalitesini yıllar içinde ustalıkla öğrenen kurucumuz, 2009 yılında bugünkü mağazamızı açtı. O günden beri aynı heyecan ve aynı özenle hizmet veriyoruz.\n\nMağazamızda Artemis, Dolce Vita, Merinos gibi Türkiye'nin önde gelen markalarından el emeği İran halılarına kadar her zevke ve her bütçeye uygun 5.000'den fazla ürün seçeneği bulunuyor. Klasikten moderne, yolluktan salon takımına kadar aradığınız her halıyı tek çatı altında bulabilirsiniz. Standart ölçülerin yanında, istediğiniz boyda kestirebileceğiniz kesme halı ve yolluk seçeneklerimiz de mevcut.\n\nBizim için halı satmak yalnızca bir ticaret değil; evinize girecek bir parçayı birlikte seçmektir. Bu yüzden mağazamıza gelen her müşterimizi misafirimiz olarak ağırlar, doğru halıyı bulana kadar birlikte bakarız. Şimdi bu deneyimi internete taşıdık: mağazamızdaki ürünleri online inceleyebilir, iyzico güvencesiyle ödeyebilir ve kapınıza kadar getirtebilirsiniz.\n\nÇeyrek asrı aşan tecrübemizle, halının en iyisini en doğru fiyata sunmaya devam ediyoruz.",
             'home_headline' => 'Eviniz İçin En Güzel Halılar',
@@ -50,8 +51,21 @@ class DatabaseSeeder extends Seeder
             Setting::updateOrCreate(['key' => $key], ['value' => $value]);
         }
 
-        // Örnek kategoriler
-        $categories = ['El Dokuması', 'Makine Halısı', 'Yolluk', 'Kilim'];
+        // Kategoriler (Ferhatlar Halı formatında ürün grupları)
+        $categories = [
+            'Dekoratif Halı Grubu',
+            'Klasik Halı Grubu',
+            'Sisal Halı Grubu',
+            'İpek Halı Grubu',
+            'Spor Klasik Grubu',
+            'Dijital Baskı Halı Grubu',
+            'Bambu Halı Grubu',
+            'Çocuk Halı Grubu',
+            'Kilim Grubu',
+            'Post Grubu',
+            'Kesme Halı Grubu',
+            'Yün Halı Grubu',
+        ];
         foreach ($categories as $i => $name) {
             Category::updateOrCreate(
                 ['slug' => Str::slug($name)],
@@ -61,10 +75,10 @@ class DatabaseSeeder extends Seeder
 
         // Örnek ürünler (görselsiz - adminden görsel eklenebilir)
         $samples = [
-            ['name' => 'Klasik Desen El Dokuması Halı', 'code' => 'BH-001', 'category' => 'el-dokumasi', 'size' => '170x240 cm', 'm2' => 4.08, 'ppm2' => 2500, 'discount' => 8900, 'campaign' => true],
-            ['name' => 'Modern Gri Makine Halısı', 'code' => 'BH-002', 'category' => 'makine-halisi', 'size' => '160x230 cm', 'm2' => 3.68, 'ppm2' => 1200, 'discount' => null, 'campaign' => false],
-            ['name' => 'Antik Kilim Desenli Yolluk', 'code' => 'BH-003', 'category' => 'yolluk', 'size' => '80x300 cm', 'm2' => 2.40, 'ppm2' => 950, 'discount' => 1990, 'campaign' => true],
-            ['name' => 'Otantik El Dokuma Kilim', 'code' => 'BH-004', 'category' => 'kilim', 'size' => '120x180 cm', 'm2' => 2.16, 'ppm2' => 1800, 'discount' => null, 'campaign' => false],
+            ['name' => 'Klasik Desen El Dokuması Halı', 'code' => 'BH-001', 'category' => 'klasik-hali-grubu', 'size' => '170x240 cm', 'm2' => 4.08, 'ppm2' => 2500, 'discount' => 8900, 'campaign' => true],
+            ['name' => 'Modern Gri Dekoratif Halı', 'code' => 'BH-002', 'category' => 'dekoratif-hali-grubu', 'size' => '160x230 cm', 'm2' => 3.68, 'ppm2' => 1200, 'discount' => null, 'campaign' => false],
+            ['name' => 'Antik Desenli Yün Halı', 'code' => 'BH-003', 'category' => 'yun-hali-grubu', 'size' => '80x300 cm', 'm2' => 2.40, 'ppm2' => 950, 'discount' => 1990, 'campaign' => true],
+            ['name' => 'Otantik El Dokuma Kilim', 'code' => 'BH-004', 'category' => 'kilim-grubu', 'size' => '120x180 cm', 'm2' => 2.16, 'ppm2' => 1800, 'discount' => null, 'campaign' => false],
         ];
 
         foreach ($samples as $s) {
@@ -99,7 +113,7 @@ class DatabaseSeeder extends Seeder
             [
                 'name' => 'Kesme Yolluk - Bej Klasik',
                 'slug' => 'kesme-yolluk-bej-klasik',
-                'category_id' => Category::where('slug', 'yolluk')->first()?->id,
+                'category_id' => Category::where('slug', 'kesme-hali-grubu')->first()?->id,
                 'price_per_m2' => 450,
                 'total_price' => null,
                 'description' => 'İstediğiniz boyda kesilir. 80 cm sabit en, dilerseniz overlok yaptırabilirsiniz.',

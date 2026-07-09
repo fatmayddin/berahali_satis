@@ -28,8 +28,8 @@ class CheckoutController extends Controller
         return view('checkout.index', [
             'items' => $this->cart->items(),
             'subtotal' => $this->cart->subtotal(),
-            'shipping' => $this->cart->shippingCost(),
-            'total' => $this->cart->total(),
+            'shippingCargo' => $this->cart->shippingCostFor('cargo'),
+            'shippingSameDay' => $this->cart->shippingCostFor('same_day'),
         ]);
     }
 
@@ -49,6 +49,7 @@ class CheckoutController extends Controller
             'city' => 'required|string|max:100',
             'district' => 'nullable|string|max:100',
             'note' => 'nullable|string|max:1000',
+            'shipping_method' => 'required|in:cargo,same_day',
         ], [], [
             'name' => 'Ad Soyad',
             'email' => 'E-posta',
@@ -57,6 +58,7 @@ class CheckoutController extends Controller
             'city' => 'İl',
             'district' => 'İlçe',
             'note' => 'Sipariş Notu',
+            'shipping_method' => 'Teslimat Yöntemi',
         ]);
 
         // Stok kontrolü
@@ -72,8 +74,8 @@ class CheckoutController extends Controller
                 'order_number' => Order::generateOrderNumber(),
                 'user_id' => Auth::id(),
                 'subtotal' => $this->cart->subtotal(),
-                'shipping_cost' => $this->cart->shippingCost(),
-                'total' => $this->cart->total(),
+                'shipping_cost' => $this->cart->shippingCostFor($data['shipping_method']),
+                'total' => $this->cart->total($data['shipping_method']),
                 'status' => 'pending',
                 'conversation_id' => (string) Str::uuid(),
             ]);

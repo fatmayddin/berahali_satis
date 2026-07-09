@@ -25,7 +25,7 @@ class SiteSettings extends Page implements HasForms
 
     protected array $keys = [
         'site_title', 'phone', 'email', 'address', 'instagram', 'whatsapp',
-        'shipping_cost', 'free_shipping_limit', 'overlock_price', 'about_content',
+        'shipping_cost', 'free_shipping_limit', 'same_day_price', 'overlock_price', 'about_content',
         'home_headline', 'home_subline',
         'home_feature_1_title', 'home_feature_1_text',
         'home_feature_2_title', 'home_feature_2_text',
@@ -59,7 +59,7 @@ class SiteSettings extends Page implements HasForms
                     ]),
 
                 Forms\Components\Section::make('Kargo & Hizmet')
-                    ->columns(3)
+                    ->columns(2)
                     ->schema([
                         Forms\Components\TextInput::make('shipping_cost')
                             ->label('Kargo Ücreti (₺)')
@@ -68,6 +68,10 @@ class SiteSettings extends Page implements HasForms
                             ->label('Ücretsiz Kargo Limiti (₺)')
                             ->numeric()
                             ->helperText('0 girilirse ücretsiz kargo limiti uygulanmaz.'),
+                        Forms\Components\TextInput::make('same_day_price')
+                            ->label('Aynı Gün Teslimat Ücreti (₺)')
+                            ->numeric()
+                            ->helperText('Mağaza aracıyla aynı gün teslimat seçeneğinin ücreti. Ücretsiz kargo limiti bu seçeneğe uygulanmaz.'),
                         Forms\Components\TextInput::make('overlock_price')
                             ->label('Overlok Ücreti (₺)')
                             ->numeric()
