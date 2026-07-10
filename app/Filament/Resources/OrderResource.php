@@ -39,10 +39,33 @@ class OrderResource extends Resource
                     Forms\Components\Select::make('status')
                         ->label('Durum')
                         ->options(Order::STATUSES)
+                        ->live()
                         ->required(),
                     Forms\Components\Textarea::make('note')
                         ->label('Sipariş Notu')
                         ->rows(2),
+                ]),
+
+            Forms\Components\Section::make('Kargo Bilgileri')
+                ->description('Kargoya verildiğinde doldurun; müşteri sipariş takibinde görür ve e-posta ile bilgilendirilir.')
+                ->columns(2)
+                ->schema([
+                    Forms\Components\Select::make('cargo_company')
+                        ->label('Kargo Firması')
+                        ->options([
+                            'Yurtiçi Kargo' => 'Yurtiçi Kargo',
+                            'Aras Kargo' => 'Aras Kargo',
+                            'MNG Kargo' => 'MNG Kargo',
+                            'PTT Kargo' => 'PTT Kargo',
+                            'Sürat Kargo' => 'Sürat Kargo',
+                            'Trendyol Express' => 'Trendyol Express',
+                            'HepsiJet' => 'HepsiJet',
+                            'Mağaza Aracı' => 'Mağaza Aracı (Elden Teslim)',
+                        ])
+                        ->searchable(),
+                    Forms\Components\TextInput::make('tracking_number')
+                        ->label('Kargo Takip No')
+                        ->maxLength(100),
                 ]),
         ]);
     }
@@ -81,6 +104,13 @@ class OrderResource extends Resource
                         ->label('Teslimat Yöntemi')
                         ->badge()
                         ->color(fn ($record) => $record->shipping_method === 'same_day' ? 'warning' : 'gray'),
+                    Infolists\Components\TextEntry::make('cargo_company')
+                        ->label('Kargo Firması')
+                        ->placeholder('-'),
+                    Infolists\Components\TextEntry::make('tracking_number')
+                        ->label('Kargo Takip No')
+                        ->placeholder('-')
+                        ->copyable(),
                     Infolists\Components\TextEntry::make('note')->label('Not')->placeholder('-')->columnSpanFull(),
                 ]),
 
@@ -133,6 +163,29 @@ class OrderResource extends Resource
                         'shipped', 'delivered' => 'info',
                         default => 'gray',
                     }),
+                Tables\Columns\IconColumn::make('odeme_onayi')
+                    ->label('İyzico Onayı')
+                    ->state(fn (Order $record) => $record->payment_id !== null)
+                    ->boolean()
+                    ->tooltip(fn (Order $record) => $record->payment_id
+                        ? 'Ödeme No: '.$record->payment_id.($record->paid_at ? ' · '.$record->paid_at->format('d.m.Y H:i') : '')
+                        : ($record->payment_error ?: 'Ödeme tamamlanmadı')),
+                Tables\Columns\TextColumn::make('payment_id')
+                    ->label('İyzico Ödeme No')
+                    ->placeholder('-')
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('paid_at')
+                    ->label('Ödeme Tarihi')
+                    ->dateTime('d.m.Y H:i')
+                    ->placeholder('-')
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('shipping_method')
+                    ->label('Teslimat')
+                    ->formatStateUsing(fn (string $state) => $state === 'same_day' ? 'Aynı Gün' : 'Kargo')
+                    ->badge()
+                    ->color(fn (string $state) => $state === 'same_day' ? 'warning' : 'gray')
+                    ->toggleable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Tarih')
                     ->dateTime('d.m.Y H:i')
@@ -142,10 +195,56 @@ class OrderResource extends Resource
                 Tables\Filters\SelectFilter::make('status')
                     ->label('Durum')
                     ->options(Order::STATUSES),
+                Tables\Filters\TernaryFilter::make('payment_id')
+                    ->label('İyzico Onayı')
+                    ->nullable()
+                    ->trueLabel('Onaylananlar')
+                    ->falseLabel('Onaylanmayanlar')
+                    ->queries(
+                        true: fn ($query) => $query->whereNotNull('payment_id'),
+                        false: fn ($query) => $query->whereNull('payment_id'),
+                    ),
             ])
             ->actions([
+                Tables\Actions\Action::make('kargoya_ver')
+                    ->label('Kargoya Ver')
+                    ->icon('heroicon-o-truck')
+                    ->color('info')
+                    ->visible(fn (Order $record) => in_array($record->status, ['paid', 'preparing']))
+                    ->form([
+                        \Filament\Forms\Components\Select::make('cargo_company')
+                            ->label('Kargo Firması')
+                            ->options([
+                                'Yurtiçi Kargo' => 'Yurtiçi Kargo',
+                                'Aras Kargo' => 'Aras Kargo',
+                                'MNG Kargo' => 'MNG Kargo',
+                                'PTT Kargo' => 'PTT Kargo',
+                                'Sürat Kargo' => 'Sürat Kargo',
+                                'Trendyol Express' => 'Trendyol Express',
+                                'HepsiJet' => 'HepsiJet',
+                                'Mağaza Aracı' => 'Mağaza Aracı (Elden Teslim)',
+                            ])
+                            ->searchable()
+                            ->required(),
+                        \Filament\Forms\Components\TextInput::make('tracking_number')
+                            ->label('Kargo Takip No')
+                            ->maxLength(100),
+                    ])
+                    ->action(function (Order $record, array $data) {
+                        $record->update([
+                            'status' => 'shipped',
+                            'cargo_company' => $data['cargo_company'],
+                            'tracking_number' => $data['tracking_number'] ?? null,
+                        ]);
+
+                        \Filament\Notifications\Notification::make()
+                            ->title('Sipariş kargoya verildi olarak işaretlendi')
+                            ->body('Müşteriye bilgilendirme e-postası gönderildi.')
+                            ->success()
+                            ->send();
+                    }),
                 Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make()->label('Durum Güncelle'),
+                Tables\Actions\EditAction::make()->label('Güncelle'),
             ])
             ->bulkActions([])
             ->defaultSort('created_at', 'desc');

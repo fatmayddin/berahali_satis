@@ -9,7 +9,14 @@
              style="background: linear-gradient(135deg, #a585ff 0%, #ffc2ad 100%);"></div>
         <div class="max-w-6xl mx-auto px-5 relative">
             <h1 class="text-heading-3 md:text-heading-2 font-medium">Ürünlerimiz</h1>
-            <p class="text-secondary/50 mt-3">{{ $products->total() }} ürün listeleniyor</p>
+            <p class="text-secondary/50 mt-3">
+                @if(request('q'))
+                    "{{ request('q') }}" için {{ $products->total() }} sonuç bulundu ·
+                    <a href="{{ route('products.index') }}" class="text-primary-600 hover:underline">aramayı temizle</a>
+                @else
+                    {{ $products->total() }} ürün listeleniyor
+                @endif
+            </p>
         </div>
     </section>
 
@@ -27,6 +34,9 @@
 
                 @if(request('sirala'))
                     <input type="hidden" name="sirala" value="{{ request('sirala') }}">
+                @endif
+                @if(request('q'))
+                    <input type="hidden" name="q" value="{{ request('q') }}">
                 @endif
 
                 {{-- Kategori --}}

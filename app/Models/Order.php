@@ -8,9 +8,9 @@ class Order extends Model
 {
     protected $fillable = [
         'order_number', 'user_id', 'name', 'email', 'phone', 'address',
-        'city', 'district', 'note', 'shipping_method', 'subtotal',
-        'shipping_cost', 'total', 'status', 'payment_id', 'conversation_id',
-        'iyzico_token', 'payment_error', 'paid_at',
+        'city', 'district', 'note', 'shipping_method', 'cargo_company',
+        'tracking_number', 'subtotal', 'shipping_cost', 'total', 'status',
+        'payment_id', 'conversation_id', 'iyzico_token', 'payment_error', 'paid_at',
     ];
 
     protected $casts = [
@@ -53,6 +53,21 @@ class Order extends Model
     public function getShippingMethodLabelAttribute(): string
     {
         return self::SHIPPING_METHODS[$this->shipping_method] ?? $this->shipping_method;
+    }
+
+    protected static function booted(): void
+    {
+        // Kargoya verildiğinde müşteriye e-posta gönder
+        static::updated(function (Order $order) {
+            if ($order->wasChanged('status') && $order->status === 'shipped') {
+                try {
+                    \Illuminate\Support\Facades\Mail::to($order->email)
+                        ->send(new \App\Mail\OrderShippedMail($order));
+                } catch (\Throwable $e) {
+                    \Illuminate\Support\Facades\Log::warning('Kargo maili gönderilemedi: '.$e->getMessage());
+                }
+            }
+        });
     }
 
     public static function generateOrderNumber(): string

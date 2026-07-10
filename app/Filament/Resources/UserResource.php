@@ -15,11 +15,16 @@ class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-users';
-    protected static ?string $navigationLabel = 'Kullanıcılar';
+    protected static ?string $navigationIcon = 'heroicon-o-shield-check';
+    protected static ?string $navigationLabel = 'Yöneticiler';
     protected static ?string $navigationGroup = 'Sistem';
-    protected static ?string $modelLabel = 'Kullanıcı';
-    protected static ?string $pluralModelLabel = 'Kullanıcılar';
+    protected static ?string $modelLabel = 'Yönetici';
+    protected static ?string $pluralModelLabel = 'Yöneticiler';
+
+    public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
+    {
+        return parent::getEloquentQuery()->where('is_admin', true);
+    }
 
     public static function form(Form $form): Form
     {
@@ -46,7 +51,8 @@ class UserResource extends Resource
                 ->helperText('Düzenlemede boş bırakılırsa şifre değişmez.'),
 
             Forms\Components\Toggle::make('is_admin')
-                ->label('Yönetici'),
+                ->label('Yönetici')
+                ->default(true),
         ]);
     }
 

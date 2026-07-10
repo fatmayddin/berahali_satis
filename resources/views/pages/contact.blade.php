@@ -51,7 +51,7 @@
                         </span>
                         <div>
                             <p class="text-tagline-2 text-secondary/50">WhatsApp 💬</p>
-                            <a href="https://wa.me/{{ \App\Models\Setting::get('whatsapp') }}?text={{ urlencode('Merhaba 👋 bilgi almak istiyorum.') }}"
+                            <a href="https://wa.me/{{ \App\Models\Setting::whatsappNumber() }}?text={{ urlencode('Merhaba 👋 bilgi almak istiyorum.') }}"
                                target="_blank" rel="noopener" class="font-medium text-green-600 hover:underline">
                                 Hemen mesaj gönderin →
                             </a>

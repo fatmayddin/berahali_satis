@@ -4,7 +4,7 @@
     $botFreeLimit = (float) \App\Models\Setting::get('free_shipping_limit', 0);
     $botSameDay = number_format((float) \App\Models\Setting::get('same_day_price', 0), 0, ',', '.');
     $botOverlock = number_format((float) \App\Models\Setting::get('overlock_price', 0), 0, ',', '.');
-    $botWhatsapp = \App\Models\Setting::get('whatsapp');
+    $botWhatsapp = \App\Models\Setting::whatsappNumber();
     $botPhone = \App\Models\Setting::get('phone');
 
     $botFaqs = [

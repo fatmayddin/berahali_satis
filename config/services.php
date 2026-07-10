@@ -35,6 +35,11 @@ return [
         ],
     ],
 
+    'google' => [
+        'client_id' => env('GOOGLE_CLIENT_ID'),
+        'client_secret' => env('GOOGLE_CLIENT_SECRET'),
+    ],
+
     'iyzico' => [
         'api_key' => env('IYZICO_API_KEY'),
         'secret_key' => env('IYZICO_SECRET_KEY'),

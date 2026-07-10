@@ -18,6 +18,11 @@
             </span>
         </div>
 
+        {{-- Sipariş durumu --}}
+        <div class="bg-white rounded-[24px] border border-stroke2 shadow-1 p-6 md:p-7 mb-6">
+            @include('components.order-timeline', ['order' => $order])
+        </div>
+
         <div class="grid md:grid-cols-3 gap-6">
             <div class="md:col-span-2 bg-white rounded-[24px] border border-stroke2 shadow-1 p-7">
                 <h2 class="text-heading-6 font-medium mb-4">Ürünler</h2>

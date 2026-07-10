@@ -18,6 +18,33 @@ class Setting extends Model
         return $settings[$key] ?? $default;
     }
 
+    /**
+     * WhatsApp numarasını wa.me formatına normalize eder (905xxxxxxxxx).
+     * "0 555 123 45 67", "+90 555...", "5551234567" gibi girişlerin hepsini düzeltir.
+     */
+    public static function whatsappNumber(): ?string
+    {
+        $digits = preg_replace('/\D/', '', (string) static::get('whatsapp', ''));
+
+        if ($digits === '' || strlen($digits) < 10) {
+            return null;
+        }
+
+        if (str_starts_with($digits, '90') && strlen($digits) === 12) {
+            return $digits;
+        }
+
+        if (str_starts_with($digits, '0') && strlen($digits) === 11) {
+            return '9'.$digits; // 05xx -> 905xx
+        }
+
+        if (strlen($digits) === 10 && str_starts_with($digits, '5')) {
+            return '90'.$digits;
+        }
+
+        return $digits;
+    }
+
     public static function set(string $key, $value): void
     {
         static::updateOrCreate(['key' => $key], ['value' => $value]);

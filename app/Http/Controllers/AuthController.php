@@ -24,7 +24,7 @@ class AuthController extends Controller
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
 
-            return redirect()->intended(route('account.orders'));
+            return redirect()->intended(route('account.index'));
         }
 
         return back()->withInput()->with('error', 'E-posta veya şifre hatalı.');
@@ -57,7 +57,7 @@ class AuthController extends Controller
 
         Auth::login($user);
 
-        return redirect()->route('account.orders')->with('success', 'Hesabınız oluşturuldu.');
+        return redirect()->route('account.index')->with('success', 'Hesabınız oluşturuldu.');
     }
 
     public function logout(Request $request)

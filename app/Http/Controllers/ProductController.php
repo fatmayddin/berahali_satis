@@ -12,6 +12,16 @@ class ProductController extends Controller
     {
         $query = Product::active()->with('category');
 
+        // Arama (ürün adı, kodu veya açıklama)
+        if ($request->filled('q')) {
+            $term = trim($request->q);
+            $query->where(function ($q) use ($term) {
+                $q->where('name', 'like', "%{$term}%")
+                    ->orWhere('code', 'like', "%{$term}%")
+                    ->orWhere('description', 'like', "%{$term}%");
+            });
+        }
+
         // Kategori filtresi
         if ($request->filled('kategori')) {
             $query->whereHas('category', fn ($q) => $q->where('slug', $request->kategori));

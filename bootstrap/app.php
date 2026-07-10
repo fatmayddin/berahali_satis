@@ -14,6 +14,10 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->validateCsrfTokens(except: [
             'odeme/callback',
         ]);
+
+        $middleware->web(append: [
+            \App\Http\Middleware\TrackVisit::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

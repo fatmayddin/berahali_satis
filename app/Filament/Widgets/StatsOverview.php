@@ -29,6 +29,10 @@ class StatsOverview extends BaseWidget
 
             Stat::make('Okunmamış Mesaj', ContactMessage::where('is_read', false)->count())
                 ->color('danger'),
+
+            Stat::make('Bugünkü Ziyaretçi', \App\Models\Visit::where('date', now()->toDateString())->distinct('ip')->count('ip'))
+                ->description(number_format((int) \App\Models\Visit::where('date', now()->toDateString())->sum('hits'), 0, ',', '.').' tıklama')
+                ->color('info'),
         ];
     }
 }

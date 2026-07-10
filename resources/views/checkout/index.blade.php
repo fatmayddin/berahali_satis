@@ -5,7 +5,6 @@
 @section('content')
     <div class="max-w-6xl mx-auto px-5 pt-36">
         <div class="text-center mb-10">
-            <span class="badge badge-green mb-4">güvenli ödeme</span>
             <h1 class="text-heading-3 font-medium">Teslimat ve Ödeme</h1>
         </div>
 
@@ -50,10 +49,10 @@
                     </div>
                     <div class="grid sm:grid-cols-3 gap-4">
                         <input type="text" name="phone" value="{{ old('phone', auth()->user()->phone ?? '') }}" placeholder="Telefon *" required class="input">
-                        <input type="text" name="city" value="{{ old('city') }}" placeholder="İl *" required class="input">
-                        <input type="text" name="district" value="{{ old('district') }}" placeholder="İlçe" class="input">
+                        <input type="text" name="city" value="{{ old('city', auth()->user()->city ?? '') }}" placeholder="İl *" required class="input">
+                        <input type="text" name="district" value="{{ old('district', auth()->user()->district ?? '') }}" placeholder="İlçe" class="input">
                     </div>
-                    <textarea name="address" rows="3" placeholder="Açık Adres *" required class="input !rounded-2xl">{{ old('address') }}</textarea>
+                    <textarea name="address" rows="3" placeholder="Açık Adres *" required class="input !rounded-2xl">{{ old('address', auth()->user()->address ?? '') }}</textarea>
                     <textarea name="note" rows="2" placeholder="Sipariş notu (isteğe bağlı)" class="input !rounded-2xl">{{ old('note') }}</textarea>
                 </div>
 

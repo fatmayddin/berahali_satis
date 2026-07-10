@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', \App\Models\Setting::get('site_title', 'Bera Halı'))</title>
     <meta name="description" content="@yield('meta_description', 'Bera Halı - Kaliteli halılar, uygun fiyatlar, kapınıza kadar teslimat.')">
+    <meta property="og:title" content="@yield('title', \App\Models\Setting::get('site_title', 'Bera Halı'))">
+    <meta property="og:description" content="@yield('meta_description', 'Bera Halı - Kaliteli halılar, uygun fiyatlar, kapınıza kadar teslimat.')">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:image" content="{{ asset('images/favicon.png') }}">
+    <link rel="canonical" href="{{ url()->current() }}">
     <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}">
     <link rel="apple-touch-icon" href="{{ asset('images/favicon.png') }}">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -110,7 +116,7 @@
     </div>
 
     {{-- Floating pill navbar --}}
-    <header class="fixed top-4 left-0 right-0 z-50 px-4" x-data="{ open: false }">
+    <header class="fixed top-4 left-0 right-0 z-50 px-4" x-data="{ open: false, searchOpen: false }">
         <div class="max-w-6xl mx-auto bg-white/90 backdrop-blur-md border border-stroke2 rounded-full shadow-1 px-5 py-2.5 flex items-center justify-between gap-4">
             <a href="{{ route('home') }}" class="pl-1 flex items-center">
                 <img src="{{ asset('images/logo.png') }}" alt="{{ \App\Models\Setting::get('site_title', 'Bera Halı') }}"
@@ -141,8 +147,13 @@
             </nav>
 
             <div class="flex items-center gap-2">
+                <button class="p-2 text-secondary/60 hover:text-secondary transition" title="Ürün Ara" @click="searchOpen = !searchOpen; $nextTick(() => $refs.searchInput?.focus())">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"/>
+                    </svg>
+                </button>
                 @auth
-                    <a href="{{ route('account.orders') }}" class="hidden lg:flex items-center rounded-full border border-transparent hover:border-stroke2 px-4 py-2 text-[15px] text-secondary/60 hover:text-secondary transition-all">Hesabım</a>
+                    <a href="{{ route('account.index') }}" class="hidden lg:flex items-center rounded-full border border-transparent hover:border-stroke2 px-4 py-2 text-[15px] text-secondary/60 hover:text-secondary transition-all">Hesabım</a>
                 @else
                     <a href="{{ route('login') }}" class="hidden lg:flex items-center rounded-full border border-transparent hover:border-stroke2 px-4 py-2 text-[15px] text-secondary/60 hover:text-secondary transition-all">Giriş Yap</a>
                 @endauth
@@ -164,6 +175,20 @@
             </div>
         </div>
 
+        {{-- Arama kutusu --}}
+        <div class="max-w-6xl mx-auto mt-2" x-show="searchOpen" x-cloak @click.outside="searchOpen = false"
+             x-transition:enter="transition ease-out duration-150"
+             x-transition:enter-start="opacity-0 -translate-y-2"
+             x-transition:enter-end="opacity-100 translate-y-0">
+            <form method="GET" action="{{ route('products.index') }}"
+                  class="bg-white border border-stroke2 rounded-full shadow-card flex items-center gap-2 px-2 py-1.5">
+                <input type="text" name="q" x-ref="searchInput" value="{{ request('q') }}"
+                       placeholder="Halı adı veya ürün kodu ile arayın..."
+                       class="flex-1 bg-transparent outline-none px-4 py-2 text-[15px]">
+                <button type="submit" class="btn btn-primary btn-md"><span>Ara</span></button>
+            </form>
+        </div>
+
         {{-- Mobil menü --}}
         <div class="lg:hidden max-w-6xl mx-auto mt-2 bg-white border border-stroke2 rounded-3xl shadow-card px-6 py-4 space-y-1" x-show="open" x-cloak @click.outside="open = false">
             <a href="{{ route('home') }}" class="block py-2 text-secondary/70">Anasayfa</a>
@@ -172,7 +197,7 @@
             <a href="{{ route('about') }}" class="block py-2 text-secondary/70">Hakkımızda</a>
             <a href="{{ route('contact') }}" class="block py-2 text-secondary/70">İletişim</a>
             @auth
-                <a href="{{ route('account.orders') }}" class="block py-2 text-secondary/70">Hesabım</a>
+                <a href="{{ route('account.index') }}" class="block py-2 text-secondary/70">Hesabım</a>
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
                     <button class="py-2 text-secondary/50">Çıkış</button>
@@ -224,7 +249,15 @@
                         <li><a href="{{ route('products.index') }}" class="hover:text-white transition">Ürünler</a></li>
                         <li><a href="{{ route('about') }}" class="hover:text-white transition">Hakkımızda</a></li>
                         <li><a href="{{ route('contact') }}" class="hover:text-white transition">İletişim</a></li>
+                        <li><a href="{{ route('orders.track') }}" class="hover:text-white transition">Sipariş Takip</a></li>
                         <li><a href="{{ route('cart.index') }}" class="hover:text-white transition">Sepetim</a></li>
+                    </ul>
+                    <p class="text-accent font-medium mb-3 mt-8">Yasal</p>
+                    <ul class="space-y-2 text-accent/60 text-sm">
+                        <li><a href="{{ route('legal', 'mesafeli-satis-sozlesmesi') }}" class="hover:text-white transition">Mesafeli Satış Sözleşmesi</a></li>
+                        <li><a href="{{ route('legal', 'on-bilgilendirme-formu') }}" class="hover:text-white transition">Ön Bilgilendirme Formu</a></li>
+                        <li><a href="{{ route('legal', 'iade-ve-degisim') }}" class="hover:text-white transition">İade ve Değişim</a></li>
+                        <li><a href="{{ route('legal', 'gizlilik-ve-kvkk') }}" class="hover:text-white transition">Gizlilik ve KVKK</a></li>
                     </ul>
                 </div>
                 <div class="col-span-6 md:col-span-4">
@@ -246,7 +279,7 @@
     @include('components.faq-bot')
 
     @if(\App\Models\Setting::get('whatsapp'))
-        <a href="https://wa.me/{{ \App\Models\Setting::get('whatsapp') }}?text={{ urlencode('Merhaba 👋 '.\App\Models\Setting::get('site_title', 'Bera Halı').' sitenizden yazıyorum, bilgi almak istiyorum.') }}"
+        <a href="https://wa.me/{{ \App\Models\Setting::whatsappNumber() }}?text={{ urlencode('Merhaba 👋 '.\App\Models\Setting::get('site_title', 'Bera Halı').' sitenizden yazıyorum, bilgi almak istiyorum.') }}"
            target="_blank" rel="noopener"
            class="fixed bottom-5 right-5 z-50 flex items-center gap-2.5 bg-green-500 hover:bg-green-600 text-white rounded-full py-3 px-4 sm:pr-5 shadow-card font-medium transition hover:scale-105" title="WhatsApp'tan Yazın">
             <svg class="w-6 h-6 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>

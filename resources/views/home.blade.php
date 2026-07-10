@@ -234,7 +234,7 @@
                 <div class="flex flex-col sm:flex-row justify-center gap-4">
                     <a href="{{ route('contact') }}" class="btn btn-primary btn-lg"><span>İletişime Geç</span></a>
                     @if(\App\Models\Setting::get('whatsapp'))
-                        <a href="https://wa.me/{{ \App\Models\Setting::get('whatsapp') }}" target="_blank" class="btn btn-white btn-lg"><span>WhatsApp'tan Yaz</span></a>
+                        <a href="https://wa.me/{{ \App\Models\Setting::whatsappNumber() }}" target="_blank" class="btn btn-white btn-lg"><span>WhatsApp'tan Yaz</span></a>
                     @endif
                 </div>
             </div>

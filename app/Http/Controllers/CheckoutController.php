@@ -163,6 +163,21 @@ class CheckoutController extends Controller
             session()->forget('pending_order_id');
             session(['last_order_number' => $order->order_number]);
 
+            // E-posta bildirimleri (hata olsa bile siparişi etkilemesin)
+            try {
+                \Illuminate\Support\Facades\Mail::to($order->email)
+                    ->send(new \App\Mail\OrderPlacedCustomerMail($order));
+
+                $adminEmail = \App\Models\Setting::get('email');
+
+                if ($adminEmail) {
+                    \Illuminate\Support\Facades\Mail::to($adminEmail)
+                        ->send(new \App\Mail\OrderPlacedAdminMail($order));
+                }
+            } catch (\Throwable $e) {
+                Log::warning('Sipariş maili gönderilemedi: '.$e->getMessage());
+            }
+
             return redirect()->route('checkout.success');
         }
 

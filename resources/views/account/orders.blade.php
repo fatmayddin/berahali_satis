@@ -4,8 +4,8 @@
 
 @section('content')
     <div class="max-w-4xl mx-auto px-5 pt-36">
+        <a href="{{ route('account.index') }}" class="text-tagline-2 text-secondary/50 hover:text-primary-600 transition">← Hesabım</a>
         <div class="text-center mb-10">
-            <span class="badge badge-primary mb-4">hesabım</span>
             <h1 class="text-heading-3 font-medium">Siparişlerim</h1>
             <form method="POST" action="{{ route('logout') }}" class="mt-3">
                 @csrf
